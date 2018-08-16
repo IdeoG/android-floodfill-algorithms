@@ -2,6 +2,7 @@ package ru.ideog.apps.floodfillvisualization.activity
 
 import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.ideog.apps.floodfillvisualization.view.MainView
@@ -9,11 +10,15 @@ import ru.ideog.apps.floodfillvisualization.view.MainView
 open class BaseActivity : AppCompatActivity(), MainView {
 
     override fun showProgress() {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        loading_view.visibility = View.VISIBLE
+
+        loading_view.playAnimation()
+        loading_view.loop(true)
     }
 
     override fun hideProgress() {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        loading_view.cancelAnimation()
+        loading_view.visibility = View.GONE
     }
 
     override fun showResult(bitmap: Bitmap, view: ImageView) {

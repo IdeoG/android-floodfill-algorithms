@@ -101,6 +101,9 @@ class MainActivity : BaseActivity() {
 
     private fun createBitmapGeneratorClickObservable(): Observable<Point> = Observable.create { emitter ->
         generate_noise_button.setOnClickListener {
+            first_algorithm_image.setImageDrawable(null)
+            second_algorithm_image.setImageDrawable(null)
+
             emitter.onNext(sizes)
         }
 
