@@ -12,8 +12,4 @@ interface MainView {
 
     fun showResults(bitmaps: Array<Bitmap>)
 
-    fun showSizeDialog()
-
-    fun hideSizeDialog()
-
 }

@@ -30,11 +30,4 @@ open class BaseActivity : AppCompatActivity(), MainView {
         second_algorithm_image.setImageBitmap(bitmaps[1])
     }
 
-    override fun showSizeDialog() {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun hideSizeDialog() {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }
