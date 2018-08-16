@@ -2,3 +2,4 @@
 
 ## Demo
 
+![demo](/extra/demo.gif)
