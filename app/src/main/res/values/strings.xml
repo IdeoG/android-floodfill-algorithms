@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Floodfill Visualization</string>
     <string-array name="algorithms_array">
-        <item>Basic FloodFill</item>
+        <item>Basic NonRecursive FloodFill</item>
         <item>Queue Linear FloodFill</item>
+        <item>Basic Recursive FloodFill</item>
     </string-array>
 </resources>

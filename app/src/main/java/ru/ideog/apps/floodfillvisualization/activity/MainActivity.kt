@@ -19,7 +19,7 @@ class MainActivity : BaseActivity() {
 
     private val presenter = FloodFillPresenter()
 
-    private val sizes = Point(128, 128)
+    private val sizes = Point(64, 64)
     private var floodFillSpeed = 100
     private var firstFloodFillMethod = 0
     private var secondFloodFillMethod = 0
@@ -119,6 +119,9 @@ class MainActivity : BaseActivity() {
             sizes.x = width.text.toString().toInt()
             sizes.y = height.text.toString().toInt()
 
+            width.hint = width.text
+            height.hint = height.text
+
             dialog.dismiss()
             emitter.onComplete()
         }
@@ -160,7 +163,4 @@ class MainActivity : BaseActivity() {
         })
     }
 
-    companion object {
-        private const val TAG = "MainActivity"
-    }
 }

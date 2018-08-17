@@ -19,8 +19,9 @@ class FloodFillModel {
 
     fun floodFill(method: Int, x: Int, y: Int, targetColor: Int, replacementColor: Int) {
         when (method) {
-            0 -> basicFloodFill(x, y, targetColor, replacementColor)
+            0 -> basicNonRecursiveFloodFill(x, y, targetColor, replacementColor)
             1 -> queueLinearFloodFill(x, y, targetColor, replacementColor)
+            2 -> recursiveFloodFill(x, y, targetColor, replacementColor)
         }
     }
 
@@ -33,7 +34,7 @@ class FloodFillModel {
         image!!.getPixels(pixels, 0, width, 1, 1, width - 1, height - 1)
     }
 
-    private fun basicFloodFill(x: Int, y: Int, targetColor: Int, replacementColor: Int) {
+    private fun basicNonRecursiveFloodFill(x: Int, y: Int, targetColor: Int, replacementColor: Int) {
         setTargetColor(targetColor)
         fillColor = replacementColor
 
@@ -115,6 +116,24 @@ class FloodFillModel {
         image!!.setPixels(pixels, 0, width, 1, 1, width - 1, height - 1)
     }
 
+    private fun recursiveFloodFill(x: Int, y: Int, targetColor: Int, replacementColor: Int) {
+        val color = image.getPixel(x, y)
+        if (color != targetColor) return
+
+        image.setPixel(x, y, replacementColor)
+
+        val up = clamp(y + 1, 0, height - 1)
+        val down = clamp(y - 1, 0, height - 1)
+        val left = clamp(x - 1, 0, width - 1)
+        val right = clamp(x + 1, 0, width - 1)
+
+        recursiveFloodFill(x, up, targetColor, replacementColor)
+        recursiveFloodFill(x, down, targetColor, replacementColor)
+        recursiveFloodFill(left, y, targetColor, replacementColor)
+        recursiveFloodFill(right, y, targetColor, replacementColor)
+
+    }
+
     private fun setTargetColor(targetColor: Int) {
         startColor[0] = Color.red(targetColor)
         startColor[1] = Color.green(targetColor)
@@ -178,5 +197,7 @@ class FloodFillModel {
     }
 
     private inner class FloodFillRange(var startX: Int, var endX: Int, var Y: Int)
+
+    private fun clamp(value: Int, min: Int, max: Int): Int = Math.max(min, Math.min(value, max))
 
 }

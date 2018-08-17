@@ -40,8 +40,8 @@ class FloodFillPresenter {
         val maxX = bitmap.width
         val maxY = bitmap.height
 
-        val x = (maxX * imgX / maxImgX).toInt()
-        val y = (maxY * imgY / maxImgY).toInt()
+        val x = (maxX * imgX / maxImgX.toFloat()).toInt()
+        val y = (maxY * imgY / maxImgY.toFloat()).toInt()
 
         val color = bitmap.getPixel(x, y)
         val isBlack = color == Color.BLACK

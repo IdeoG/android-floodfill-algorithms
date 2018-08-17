@@ -34,8 +34,4 @@ open class BaseActivity : AppCompatActivity(), MainView {
         second_algorithm_image.setImageBitmap(bitmaps[1])
     }
 
-    companion object {
-        private const val TAG = "BaseActivity"
-    }
-
 }
