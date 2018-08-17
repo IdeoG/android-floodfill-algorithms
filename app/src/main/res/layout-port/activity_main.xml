@@ -87,6 +87,12 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
+        android:max="100"
+        android:maxHeight="3dp"
+        android:minHeight="3dp"
+        android:progress="60"
+        android:progressDrawable="@drawable/volume_control"
+        android:thumbTint="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/_textView2" />
 

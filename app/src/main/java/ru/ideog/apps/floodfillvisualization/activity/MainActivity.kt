@@ -16,9 +16,11 @@ import ru.ideog.apps.floodfillvisualization.presenter.FloodFillPresenter
 
 
 class MainActivity : BaseActivity() {
-    private val presenter = FloodFillPresenter()
-    private val sizes = Point(64, 64)
 
+    private val presenter = FloodFillPresenter()
+
+    private val sizes = Point(128, 128)
+    private var floodFillSpeed = 100
     private var firstFloodFillMethod = 0
     private var secondFloodFillMethod = 0
 
@@ -48,37 +50,24 @@ class MainActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { it.action == MotionEvent.ACTION_DOWN }
                 .observeOn(Schedulers.computation())
-                .map { presenter.executeFloodFilling(firstFloodFillMethod, first_algorithm_image,it) }
+                .map { presenter.executeFloodFilling(firstFloodFillMethod, first_algorithm_image, it) }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { showResult(it, first_algorithm_image) }
+                .subscribe({ showResult(it, first_algorithm_image) }, { it.printStackTrace() })
 
         secondBitmapFloodFiller
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { it.action == MotionEvent.ACTION_DOWN }
                 .observeOn(Schedulers.computation())
-                .map { presenter.executeFloodFilling(secondFloodFillMethod, second_algorithm_image,it) }
+                .map { presenter.executeFloodFilling(secondFloodFillMethod, second_algorithm_image, it) }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { showResult(it, second_algorithm_image) }
+                .subscribe({ showResult(it, second_algorithm_image) }, { it.printStackTrace() })
 
         bitmapSizePicker
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
 
-        val adapter = ArrayAdapter.createFromResource(this,
-                R.array.algorithms_array, android.R.layout.simple_spinner_item)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        first_algorithm_spinner.adapter = adapter
-        second_algorithm_spinner.adapter = adapter
-
-        first_algorithm_spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) { }
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) { firstFloodFillMethod = p2 }
-        }
-        second_algorithm_spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) { }
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) { secondFloodFillMethod = p2 }
-        }
+        createSpinnerItemsListeners()
+        createSeekBarValueListener()
     }
 
     private fun createFirstBitmapMotionEventObservable(): Observable<MotionEvent> = Observable.create { emitter ->
@@ -137,4 +126,41 @@ class MainActivity : BaseActivity() {
         cancelButton.setOnClickListener { dialog.dismiss() }
     }
 
+    private fun createSpinnerItemsListeners() {
+        val adapter = ArrayAdapter.createFromResource(this,
+                R.array.algorithms_array, android.R.layout.simple_spinner_item)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        first_algorithm_spinner.adapter = adapter
+        second_algorithm_spinner.adapter = adapter
+
+        first_algorithm_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                firstFloodFillMethod = p2
+            }
+        }
+        second_algorithm_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                secondFloodFillMethod = p2
+            }
+        }
+    }
+
+    private fun createSeekBarValueListener() {
+        speed_seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                floodFillSpeed = p1
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {}
+        })
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
+    }
 }

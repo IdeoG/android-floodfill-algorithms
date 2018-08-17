@@ -3,6 +3,7 @@ package ru.ideog.apps.floodfillvisualization.presenter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.ImageView
 import ru.ideog.apps.floodfillvisualization.model.FloodFillModel
@@ -10,6 +11,7 @@ import java.util.*
 
 
 class FloodFillPresenter {
+
     private var model = FloodFillModel()
 
     fun executeFloodFilling(method: Int, view: ImageView, event: MotionEvent): Bitmap {
@@ -25,7 +27,15 @@ class FloodFillPresenter {
         val maxImgX = view.width
         val maxImgY = view.height
 
-        val bitmap = (view.drawable as BitmapDrawable).bitmap
+        var bitmap: Bitmap?
+        try {
+            bitmap = (view.drawable as BitmapDrawable).bitmap
+        } catch (e: kotlin.TypeCastException) {
+            e.printStackTrace()
+            Log.i(TAG, "executeFloodFilling: exception occurred -> $e")
+            bitmap = Bitmap.createBitmap(64, 64, Bitmap.Config.RGB_565)
+            return bitmap
+        }
 
         val maxX = bitmap.width
         val maxY = bitmap.height
@@ -68,4 +78,8 @@ class FloodFillPresenter {
     }
 
     private fun ClosedRange<Int>.random() = Random().nextInt((endInclusive + 1) - start) + start
+
+    companion object {
+        private const val TAG = "FloodFillPresenter"
+    }
 }

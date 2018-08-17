@@ -30,18 +30,20 @@
 
         <EditText
             android:id="@+id/edit_height"
-            android:layout_width="80dp"
+            android:layout_width="50dp"
             android:layout_height="42dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="256"
             android:inputType="number"
+            android:textAlignment="center"
             app:layout_constraintStart_toEndOf="@+id/_textView2"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <TextView
-            android:layout_width="20dp"
+            android:layout_width="10dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
@@ -57,13 +59,15 @@
 
         <EditText
             android:id="@+id/edit_width"
-            android:layout_width="80dp"
+            android:layout_width="50dp"
             android:layout_height="42dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="256"
             android:inputType="number"
+            android:textAlignment="center"
             app:layout_constraintEnd_toStartOf="@+id/_textView2"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 

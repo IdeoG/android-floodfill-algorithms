@@ -24,6 +24,15 @@ class FloodFillModel {
         }
     }
 
+    fun useImage(img: Bitmap) {
+        image = img
+        width = img.width
+        height = img.height
+        pixels = IntArray(width * height)
+
+        image!!.getPixels(pixels, 0, width, 1, 1, width - 1, height - 1)
+    }
+
     private fun basicFloodFill(x: Int, y: Int, targetColor: Int, replacementColor: Int) {
         setTargetColor(targetColor)
         fillColor = replacementColor
@@ -104,15 +113,6 @@ class FloodFillModel {
         }
 
         image!!.setPixels(pixels, 0, width, 1, 1, width - 1, height - 1)
-    }
-
-    fun useImage(img: Bitmap) {
-        image = img
-        width = img.width
-        height = img.height
-        pixels = IntArray(width * height)
-
-        image!!.getPixels(pixels, 0, width, 1, 1, width - 1, height - 1)
     }
 
     private fun setTargetColor(targetColor: Int) {

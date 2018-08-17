@@ -88,6 +88,8 @@
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
+        android:max="100"
+        android:progress="100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/_textView2" />
 
