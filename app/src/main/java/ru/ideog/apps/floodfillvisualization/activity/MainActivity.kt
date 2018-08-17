@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding2.widget.RxSeekBar
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -15,6 +16,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.ideog.apps.floodfillvisualization.R
 import ru.ideog.apps.floodfillvisualization.presenter.FloodFillPresenter
+import com.jakewharton.rxbinding2.widget.RxAdapterView
+
+
 
 
 class MainActivity : BaseActivity() {
@@ -91,14 +95,13 @@ class MainActivity : BaseActivity() {
     }
 
     private fun createBitmapGeneratorClickObservable(): Observable<Point> = Observable.create { emitter ->
-        generate_noise_button.setOnClickListener {
-            first_algorithm_image.setImageDrawable(null)
-            second_algorithm_image.setImageDrawable(null)
+        RxView.clicks(generate_noise_button)
+                .subscribe {
+                    first_algorithm_image.setImageDrawable(null)
+                    second_algorithm_image.setImageDrawable(null)
 
-            emitter.onNext(sizes)
-        }
-
-        emitter.setCancellable { generate_noise_button.setOnClickListener(null) }
+                    emitter.onNext(sizes)
+                }
     }
 
     private fun createBitmapSizeClickObservable(): Completable = Completable.create { emitter ->
@@ -149,30 +152,17 @@ class MainActivity : BaseActivity() {
         first_algorithm_spinner.adapter = adapter
         second_algorithm_spinner.adapter = adapter
 
-        first_algorithm_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                firstFloodFillMethod = p2
-            }
-        }
-        second_algorithm_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                secondFloodFillMethod = p2
-            }
-        }
+        RxAdapterView.itemSelections(first_algorithm_spinner)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe { firstFloodFillMethod = it }
+
+        RxAdapterView.itemSelections(second_algorithm_spinner)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe { firstFloodFillMethod = it }
     }
 
     private fun createSeekBarValueListener() {
-        speed_seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                floodFillSpeed = p1
-            }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) {}
-
-            override fun onStopTrackingTouch(p0: SeekBar?) {}
-        })
+        RxSeekBar.userChanges(speed_seekbar).subscribe { floodFillSpeed = it }
     }
 
 }
