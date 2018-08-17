@@ -6,6 +6,8 @@ import android.support.v7.app.AlertDialog
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
+import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -112,10 +114,20 @@ class MainActivity : BaseActivity() {
         val width = dialogView.findViewById<EditText>(R.id.edit_width)
         val height = dialogView.findViewById<EditText>(R.id.edit_height)
 
+        okButton.isEnabled = false
+
+        val widthWatcherObservable = RxTextView.textChanges(width)
+        val heightWatcherObservable = RxTextView.textChanges(width)
+
+        Observable.merge(widthWatcherObservable, heightWatcherObservable)
+                .subscribe {
+                    okButton.isEnabled = (width.text.toString() != "") && (height.text.toString() != "")
+                }
+
+        RxView.clicks(size_button).subscribe { dialog.show() }
         size_button.setOnClickListener { dialog.show() }
 
-        okButton.setOnClickListener {
-
+        RxView.clicks(okButton).subscribe {
             sizes.x = width.text.toString().toInt()
             sizes.y = height.text.toString().toInt()
 
@@ -126,7 +138,7 @@ class MainActivity : BaseActivity() {
             emitter.onComplete()
         }
 
-        cancelButton.setOnClickListener { dialog.dismiss() }
+        RxView.clicks(cancelButton).subscribe { dialog.dismiss() }
     }
 
     private fun createSpinnerItemsListeners() {
